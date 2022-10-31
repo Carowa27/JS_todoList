@@ -30,24 +30,32 @@ doneListHeader.innerText = "Done";
 let doneListUl = document.createElement("ul");
 doneListUl.id = "doneListUl";
 
+let todoListItem = "";
+
 function ulListFrTodo() {
   // taskListUl = ul, todoList = array
 
   for (let i = 0; i < todoList.length; i++) {
-    let todoListItem = document.createElement("li");
-    todoListItem.classList.add("taskStatusTodo"); //
-    let doneListItem = document.createElement("li");
-    doneListItem.classList.add("taskStatusDone");
+    todoListItem = document.createElement("li");
+    //todoListItem.classList.add("taskStatusTodo", "clickBlock"); //
+    // doneListItem = document.createElement("li");
+    // doneListItem.classList.add("taskStatusDone", "clickBlock");
+    todoListItem.addEventListener("click", toggleTaskDone);
+    // doneListItem.addEventListener("click", toggleTaskDone);
     // doneListItem.classList.add("taskStatusDone");
     if (i < todoList.length) {
       if (todoList[i].done === false) {
         // todoList[i].classList.replace("taskStatusDone", "taskStatusTodo");
         todoListItem.innerHTML = todoList[i].task;
         taskListUl.appendChild(todoListItem);
-      } else {
-        doneListItem.innerHTML = todoList[i].task;
-        doneListUl.appendChild(doneListItem);
-        // todoList[i].classList.toggle("taskStastusTodo");
+        todoListItem.classList.add("taskStatusTodo", "clickBlock"); //
+      }
+      if (todoList[i].done === true) {
+        todoListItem.innerHTML = todoList[i].task;
+        doneListUl.appendChild(todoListItem);
+
+        todoListItem.classList.add("taskStatusDone", "clickBlock"); //
+        // todoList[i].classList.toggle("taskStatusTodo");
         // todoList[i].classList.add("taskStatusDone");
 
         // let taskDone = todoList[i].classList;
@@ -59,20 +67,37 @@ function ulListFrTodo() {
 
 ulListFrTodo();
 
-function emptyUl() {
-  taskListUl.removeChild();
-  doneListUl.removeChild(doneListItem);
-}
-
 saveValueBtn.addEventListener("click", saveTodo);
 
 function saveTodo() {
   todoList.push(new TodoItem((innerText = todoInput.value), false, "", ""));
-  emptyUl();
-  ulListFrTodo();
+  console.log(todoList);
+  todoListItem = document.createElement("li");
+  todoListItem.classList.add("taskStatusTodo", "clickBlock");
+  todoListItem.innerHTML = todoInput.value;
+  taskListUl.appendChild(todoListItem);
 }
 
-/*längst ner?*/
+function toggleTaskDone() {
+  //hitta rätt if satser
+  // if (allLi[i].done === false) {
+  //   allLi[i].classList.toggle("taskStatusTodo");
+  //   allLi[i].classList.toggle("taskStatusDone");
+  //   doneListUl.appendChild(allLi[i]);
+  //   taskListUl.removeChild(allLi[i]);
+  //   allLi[i].done = true;
+  // }
+  // if (todoListItem.done === true) {
+  //   todoListItem.classList.toggle("taskStatusTodo");
+  //   todoListItem.classList.toggle("taskStatusDone");
+  //   taskListUl.appendChild(todoListItem);
+  //   doneListUl.removeChild(todoListItem);
+  //   todoListItem.done = false;
+  // }
+  // console.log(allLi[i].done);
+  console.log("did toggle");
+}
+/*längst ner*/
 inputContainer.appendChild(todoInput);
 inputContainer.appendChild(saveValueBtn);
 
