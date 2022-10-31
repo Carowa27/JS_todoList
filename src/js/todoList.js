@@ -15,3 +15,7 @@ todoList.push(
     "Monday 31st oct"
   )
 );
+todoList.push(
+  new TodoItem("HTML CSS exam", true, "HTML CSS", "Friday 7th oct")
+);
+todoList.push(new TodoItem("Not go CrAZy", false, "Personal", "Always"));
