@@ -1,6 +1,34 @@
-import { todoList } from "./todoList.js";
-import { TodoItem } from "./class.js";
+//class
+class TodoItem {
+  constructor(task, done, category, deadline) {
+    this.task = task;
+    this.done = done;
+    this.category = category;
+    this.deadline = deadline;
+  }
+}
 
+//array
+let todoList = [];
+
+//arayItems
+todoList.push(
+  new TodoItem("make js assignment", false, "JS", "Friday 5th nov")
+);
+todoList.push(
+  new TodoItem(
+    "make LIA assignment",
+    false,
+    "Kompetensportfölj",
+    "Monday 31st oct"
+  )
+);
+todoList.push(
+  new TodoItem("HTML CSS exam", true, "HTML CSS", "Friday 7th oct")
+);
+todoList.push(new TodoItem("Not go CrAZy", false, "Personal", "Always"));
+
+//variables and variableSettings
 let layoutContainer = document.getElementById("container");
 layoutContainer.classList.add("container", "container__layout");
 
@@ -21,91 +49,85 @@ saveValueBtn.innerText = "Save task";
 let taskListHeader = document.createElement("h3");
 taskListHeader.innerText = "ToDo";
 
-let taskListUl = document.createElement("ul");
-taskListUl.id = "taskListUl";
+let doList = document.createElement("ul");
+doList.classList.add("listLayout");
 
-let doneListHeader = document.createElement("h3");
+let doneListHeader = document.createElement("h5");
 doneListHeader.innerText = "Done";
 
-let doneListUl = document.createElement("ul");
-doneListUl.id = "doneListUl";
+let doneList = document.createElement("ul");
+doneList.classList.add("listLayout");
 
-let todoListItem = "";
-
-function ulListFrTodo() {
-  // taskListUl = ul, todoList = array
-
-  for (let i = 0; i < todoList.length; i++) {
-    todoListItem = document.createElement("li");
-    //todoListItem.classList.add("taskStatusTodo", "clickBlock"); //
-    // doneListItem = document.createElement("li");
-    // doneListItem.classList.add("taskStatusDone", "clickBlock");
-    todoListItem.addEventListener("click", toggleTaskDone);
-    // doneListItem.addEventListener("click", toggleTaskDone);
-    // doneListItem.classList.add("taskStatusDone");
-    if (i < todoList.length) {
-      if (todoList[i].done === false) {
-        // todoList[i].classList.replace("taskStatusDone", "taskStatusTodo");
-        todoListItem.innerHTML = todoList[i].task;
-        taskListUl.appendChild(todoListItem);
-        todoListItem.classList.add("taskStatusTodo", "clickBlock"); //
-      }
-      if (todoList[i].done === true) {
-        todoListItem.innerHTML = todoList[i].task;
-        doneListUl.appendChild(todoListItem);
-
-        todoListItem.classList.add("taskStatusDone", "clickBlock"); //
-        // todoList[i].classList.toggle("taskStatusTodo");
-        // todoList[i].classList.add("taskStatusDone");
-
-        // let taskDone = todoList[i].classList;
-        // taskDone.replace("taskStatusTodo", "taskStatusDone");
-      }
-    }
+//functions
+function addTodo() {
+  if (todoInput.value === "") {
+    alert("Field is empty, write something and try again!");
+  } else {
+    todoList.push(new TodoItem((innerText = todoInput.value), false, "", ""));
+    todoInput.value = "";
+    showTodos();
   }
 }
 
-ulListFrTodo();
+function showTodos() {
+  doneList.innerHTML = "";
+  doList.innerHTML = "";
+  for (let i = 0; i < todoList.length; i++) {
+    let taskSpace = document.createElement("p");
+    taskSpace.classList.add("taskSpace");
+    let todoListItem = document.createElement("li");
+    todoListItem.classList.add("listItem");
+    let taskDelete = document.createElement("i");
+    taskDelete.className = "bi bi-trash trashIcon";
+    if (todoList[i].done === false) {
+      todoListItem.innerText = todoList[i].task;
+      taskSpace.classList.add("taskStatusTodo");
 
-saveValueBtn.addEventListener("click", saveTodo);
+      doList.appendChild(taskSpace);
+      taskSpace.appendChild(todoListItem);
+      taskSpace.appendChild(taskDelete);
+    }
+    if (todoList[i].done === true) {
+      todoListItem.innerText = todoList[i].task;
+      taskSpace.classList.add("taskStatusDone");
 
-function saveTodo() {
-  todoList.push(new TodoItem((innerText = todoInput.value), false, "", ""));
+      doneList.appendChild(taskSpace);
+      taskSpace.appendChild(todoListItem);
+      taskSpace.appendChild(taskDelete);
+    }
+
+    todoListItem.addEventListener("click", () => {
+      toggleStatus(taskSpace, todoList[i]);
+    });
+  }
+}
+
+function toggleStatus(taskSpace, listPosition) {
+  taskSpace.classList.toggle("taskStatusDone");
+  taskSpace.classList.toggle("taskStatusTodo");
+  if (listPosition.done === true) {
+    doList.appendChild(taskSpace);
+    listPosition.done = false;
+  } else {
+    doneList.appendChild(taskSpace);
+    listPosition.done = true;
+  }
   console.log(todoList);
-  todoListItem = document.createElement("li");
-  todoListItem.classList.add("taskStatusTodo", "clickBlock");
-  todoListItem.innerHTML = todoInput.value;
-  taskListUl.appendChild(todoListItem);
 }
 
-function toggleTaskDone() {
-  //hitta rätt if satser
-  // if (allLi[i].done === false) {
-  //   allLi[i].classList.toggle("taskStatusTodo");
-  //   allLi[i].classList.toggle("taskStatusDone");
-  //   doneListUl.appendChild(allLi[i]);
-  //   taskListUl.removeChild(allLi[i]);
-  //   allLi[i].done = true;
-  // }
-  // if (todoListItem.done === true) {
-  //   todoListItem.classList.toggle("taskStatusTodo");
-  //   todoListItem.classList.toggle("taskStatusDone");
-  //   taskListUl.appendChild(todoListItem);
-  //   doneListUl.removeChild(todoListItem);
-  //   todoListItem.done = false;
-  // }
-  // console.log(allLi[i].done);
-  console.log("did toggle");
-}
-/*längst ner*/
+//activate functions
+showTodos();
+saveValueBtn.addEventListener("click", addTodo);
+
+//layout
 inputContainer.appendChild(todoInput);
 inputContainer.appendChild(saveValueBtn);
 
 layoutContainer.appendChild(siteHeader);
 layoutContainer.appendChild(inputContainer);
 layoutContainer.appendChild(taskListHeader);
-layoutContainer.appendChild(taskListUl);
+layoutContainer.appendChild(doList);
 layoutContainer.appendChild(doneListHeader);
-layoutContainer.appendChild(doneListUl);
+layoutContainer.appendChild(doneList);
 
 console.log(todoList);

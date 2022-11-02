@@ -15,11 +15,13 @@ body {
     background-color: rgb(213, 219, 255);
   }
   &__inputStyling {
+    display: flex;
+    justify-content: center;
     //margin: 20px;
     #todoInput {
       margin-right: 10px;
       padding: 5px;
-      width: 30vw;
+      width: 50vw;
     }
     #saveValueBtn {
       margin-left: 5px;
@@ -31,19 +33,32 @@ body {
 // sätt in dessa bra
 
 .taskStatusTodo {
-  list-style-type: "\1F449";
+  // list-style-type: "\1F449";
   background-color: rgb(184, 194, 255);
   border: 1px solid rgb(146, 160, 255);
 }
 .taskStatusDone {
-  list-style-type: "\1F44D";
+  // list-style-type: "\1F44D";
   color: rgb(170, 170, 170);
   //border: 1px solid rgb(156, 156, 156);
 }
-
-.clickBlock {
-  padding: 0px 5px 2px 5px;
-  cursor: pointer;
+.taskSpace {
+  width: 90vw;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 5px 2px 5px;
   border-radius: 5px;
-  margin: 2px;
+  margin: 5px;
+}
+.trashIcon {
+  display: flex;
+  align-self: center;
+  cursor: pointer;
+}
+.listItem {
+  list-style-type: none;
+  cursor: pointer;
+}
+.listLayout {
+  padding: 0;
 }
