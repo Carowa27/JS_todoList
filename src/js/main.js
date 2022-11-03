@@ -57,7 +57,13 @@ doneListHeader.innerText = "Done";
 
 let doneList = document.createElement("ul");
 doneList.classList.add("listLayout");
+//local storage back into list
+// let getActiveTodoArray = JSON.parse(localStorage.getItem("activeTasks"));
 
+//   for (let i = 0; i < getActiveTodoArray.length; i++) {
+//     todoList.push(getActiveTodoArray[i]);
+//     // if(todoList[i].done)
+//   }
 //functions
 function addTodo() {
   if (todoInput.value === "") {
@@ -72,47 +78,85 @@ function addTodo() {
 function showTodos() {
   doneList.innerHTML = "";
   doList.innerHTML = "";
+
   for (let i = 0; i < todoList.length; i++) {
-    let taskSpace = document.createElement("p");
-    taskSpace.classList.add("taskSpace");
     let todoListItem = document.createElement("li");
     todoListItem.classList.add("listItem");
-    let taskDelete = document.createElement("i");
-    taskDelete.className = "bi bi-trash trashIcon";
+    let taskSpace = document.createElement("span");
+    taskSpace.classList.add("taskSpace");
+    let taskDeleteIcon = document.createElement("i");
+    taskDeleteIcon.className = "bi bi-trash trashIcon";
     if (todoList[i].done === false) {
-      todoListItem.innerText = todoList[i].task;
-      taskSpace.classList.add("taskStatusTodo");
+      taskSpace.innerText = todoList[i].task;
+      todoListItem.classList.add("taskStatusTodo");
+      let taskToDoIcon = document.createElement("i");
+      taskToDoIcon.className = "bi bi-square todoSquareIcon";
 
-      doList.appendChild(taskSpace);
-      taskSpace.appendChild(todoListItem);
-      taskSpace.appendChild(taskDelete);
+      doList.appendChild(todoListItem);
+      todoListItem.appendChild(taskToDoIcon);
+      todoListItem.appendChild(taskSpace);
+      todoListItem.appendChild(taskDeleteIcon);
+
+      // let activeTodoString = JSON.stringify(todoList);
+      // localStorage.setItem("activeTasks", activeTodoString);
+
+      taskToDoIcon.addEventListener("click", () => {
+        toggleStatus(todoListItem, todoList[i]);
+      });
     }
     if (todoList[i].done === true) {
-      todoListItem.innerText = todoList[i].task;
-      taskSpace.classList.add("taskStatusDone");
+      taskSpace.innerText = todoList[i].task;
+      todoListItem.classList.add("taskStatusDone");
+      let taskDoneIcon = document.createElement("i");
+      taskDoneIcon.className = "bi bi-check-square doneSquareIcon";
 
-      doneList.appendChild(taskSpace);
-      taskSpace.appendChild(todoListItem);
-      taskSpace.appendChild(taskDelete);
+      doneList.appendChild(todoListItem);
+      todoListItem.appendChild(taskDoneIcon);
+      todoListItem.appendChild(taskSpace);
+      todoListItem.appendChild(taskDeleteIcon);
+
+      // let activeTodoString = JSON.stringify(todoList);
+      // localStorage.setItem("activeTasks", activeTodoString);
+
+      taskDoneIcon.addEventListener("click", () => {
+        toggleStatus(todoListItem, todoList[i]);
+      });
     }
 
-    todoListItem.addEventListener("click", () => {
-      toggleStatus(taskSpace, todoList[i]);
+    taskSpace.addEventListener("click", () => {
+      toggleStatus(todoListItem, todoList[i]);
     });
+    taskDeleteIcon.addEventListener("click", () => {
+      deleteTask(i);
+    });
+
+    // let activeTodoString = JSON.stringify(todoList);
+    // localStorage.setItem("activeTasks", activeTodoString);
   }
 }
 
-function toggleStatus(taskSpace, listPosition) {
-  taskSpace.classList.toggle("taskStatusDone");
-  taskSpace.classList.toggle("taskStatusTodo");
+function toggleStatus(LiItem, listPosition) {
+  LiItem.classList.toggle("taskStatusDone");
+  LiItem.classList.toggle("taskStatusTodo");
   if (listPosition.done === true) {
-    doList.appendChild(taskSpace);
+    doList.appendChild(LiItem);
     listPosition.done = false;
   } else {
-    doneList.appendChild(taskSpace);
+    doneList.appendChild(LiItem);
     listPosition.done = true;
   }
   console.log(todoList);
+  showTodos();
+}
+
+function deleteTask(listPosition) {
+  for (let i = 0; i < todoList.length; i++) {
+    if (i === listPosition) {
+      todoList.splice(i, 1);
+      console.log(todoList);
+    }
+  }
+  showTodos();
 }
 
 //activate functions

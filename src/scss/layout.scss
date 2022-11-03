@@ -43,21 +43,33 @@ body {
   //border: 1px solid rgb(156, 156, 156);
 }
 .taskSpace {
-  width: 90vw;
-  display: flex;
-  justify-content: space-between;
-  padding: 2px 5px 2px 5px;
-  border-radius: 5px;
-  margin: 5px;
+  cursor: pointer;
+  width: 90%;
+  padding-left: 10px;
 }
 .trashIcon {
   display: flex;
   align-self: center;
   cursor: pointer;
 }
+.todoSquareIcon {
+  display: flex;
+  align-self: center;
+  cursor: pointer;
+}
+.doneSquareIcon {
+  display: flex;
+  align-self: center;
+  cursor: pointer;
+}
 .listItem {
   list-style-type: none;
-  cursor: pointer;
+  width: 90vw;
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 5px 2px 5px;
+  border-radius: 5px;
+  margin: 5px;
 }
 .listLayout {
   padding: 0;
