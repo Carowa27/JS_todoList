@@ -17,16 +17,67 @@ body {
   &__inputStyling {
     display: flex;
     justify-content: center;
+    flex-direction: column;
     //margin: 20px;
     #todoInput {
       margin-right: 10px;
       padding: 5px;
-      width: 50vw;
+      width: 60vw;
+    }
+    #categoryInput {
+      margin-right: 10px;
+      padding: 5px;
+      width: 60vw;
+    }
+  }
+  &__taskStyling {
+    display: flex;
+    flex-direction: column;
+    padding: 2vh;
+    width: 90%;
+    height: 50%;
+    margin: 20px 0 0 0;
+    border: 1px solid rgb(146, 160, 255);
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px grey;
+  }
+  &__newTodoStyling {
+    display: flex;
+    align-items: end;
+    padding: 2vh;
+    width: 90%;
+    border: 1px solid rgb(146, 160, 255);
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px grey;
+    #categoryLabel {
+      margin-top: 5px;
+    }
+    #todoInput {
+      margin-top: 5px;
+    }
+    #categoryInput {
+      margin-top: 5px;
     }
     #saveValueBtn {
       margin-left: 5px;
       padding: 5px;
+      height: 30%;
     }
+  }
+  // &__saveSortStyling {
+  // }
+  &__sortStyling {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+    // .sortNameIcon {
+    //   padding: 10px;
+    // margin-top: 10px;
+    // }
+    // .sortCatIcon {
+    //   padding: 10px;
+    // margin-top: 10px;
+    // }
   }
 }
 
@@ -47,30 +98,55 @@ body {
   width: 90%;
   padding-left: 10px;
 }
+.categorySpace {
+  width: 90%;
+  padding-right: 10px;
+  text-align: right;
+}
 .trashIcon {
   display: flex;
   align-self: center;
   cursor: pointer;
+  padding-top: 1.2px;
 }
 .todoSquareIcon {
   display: flex;
   align-self: center;
+  padding-top: 1.2px;
   cursor: pointer;
 }
 .doneSquareIcon {
   display: flex;
   align-self: center;
   cursor: pointer;
+  padding-top: 1.2px;
 }
 .listItem {
   list-style-type: none;
-  width: 90vw;
+  width: 95%;
   display: flex;
   justify-content: space-between;
-  padding: 2px 5px 2px 5px;
+  align-items: center;
+  padding: 3px 5px 3px 5px;
+  margin: 2px;
   border-radius: 5px;
-  margin: 5px;
+  // margin: 5px;
 }
 .listLayout {
+  display: flex;
+  flex-direction: column;
   padding: 0;
+  margin: 0;
+}
+.headingH3 {
+  margin: 0px 0 10px 20px;
+}
+.headingH5 {
+  margin: 10px 0 5px 20px;
+}
+.footerLayout {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+  font-size: 8pt;
 }

@@ -1,10 +1,9 @@
 //class
 class TodoItem {
-  constructor(task, done, category, deadline) {
+  constructor(task, done, category) {
     this.task = task;
     this.done = done;
     this.category = category;
-    this.deadline = deadline;
   }
 }
 
@@ -12,21 +11,10 @@ class TodoItem {
 let todoList = [];
 
 //arayItems
-todoList.push(
-  new TodoItem("make js assignment", false, "JS", "Friday 5th nov")
-);
-todoList.push(
-  new TodoItem(
-    "make LIA assignment",
-    false,
-    "Kompetensportfölj",
-    "Monday 31st oct"
-  )
-);
-todoList.push(
-  new TodoItem("HTML CSS exam", true, "HTML CSS", "Friday 7th oct")
-);
-todoList.push(new TodoItem("Not go CrAZy", false, "Personal", "Always"));
+todoList.push(new TodoItem("make js assignment", false, "JS"));
+todoList.push(new TodoItem("make LIA assignment", false, "Kompetensportfölj"));
+todoList.push(new TodoItem("HTML CSS exam", true, "HTML CSS"));
+todoList.push(new TodoItem("Not go CrAZy", false, "Personal"));
 
 //variables and variableSettings
 let layoutContainer = document.getElementById("container");
@@ -35,28 +23,64 @@ layoutContainer.classList.add("container", "container__layout");
 let siteHeader = document.createElement("h2");
 siteHeader.innerText = "todoList";
 
+let newTodoContainer = document.createElement("section");
+newTodoContainer.id = "newTodoContainer";
+newTodoContainer.classList.add("container__newTodoStyling");
+
 let inputContainer = document.createElement("section");
 inputContainer.id = "inputContainer";
 inputContainer.classList.add("container__inputStyling");
 
+let todoLabel = document.createElement("label");
+todoLabel.for = "todoInput";
+todoLabel.innerHTML = "new task<br/>";
 let todoInput = document.createElement("input");
 todoInput.id = "todoInput";
+
+let categoryLabel = document.createElement("label");
+categoryLabel.id = "categoryLabel";
+categoryLabel.for = "categoryInput";
+categoryLabel.innerHTML = "category<br/>";
+let categoryInput = document.createElement("input");
+categoryInput.id = "categoryInput";
+
+let saveSortContainer = document.createElement("section");
+saveSortContainer.classList.add("container__saveSortStyling");
 
 let saveValueBtn = document.createElement("button");
 saveValueBtn.id = "saveValueBtn";
 saveValueBtn.innerText = "Save task";
 
+let sortContainer = document.createElement("section");
+sortContainer.classList.add("container__sortStyling");
+
+let sortNameIcon = document.createElement("i");
+sortNameIcon.className = "bi bi-sort-alpha-down sortNameIcon";
+
+let sortCatIcon = document.createElement("i");
+sortCatIcon.className = "bi bi-sort-down sortCatIcon";
+
+let taskContainer = document.createElement("section");
+taskContainer.id = "taskContainer";
+taskContainer.classList.add("container__taskStyling");
+
 let taskListHeader = document.createElement("h3");
 taskListHeader.innerText = "ToDo";
+taskListHeader.classList.add("headingH3");
 
 let doList = document.createElement("ul");
 doList.classList.add("listLayout");
 
 let doneListHeader = document.createElement("h5");
 doneListHeader.innerText = "Done";
+doneListHeader.classList.add("headingH5");
 
 let doneList = document.createElement("ul");
 doneList.classList.add("listLayout");
+
+let footer = document.createElement("footer");
+footer.classList.add("footerLayout");
+footer.innerHTML = "Carolina Warntorp";
 //local storage back into list
 // let getActiveTodoArray = JSON.parse(localStorage.getItem("activeTasks"));
 
@@ -69,8 +93,15 @@ function addTodo() {
   if (todoInput.value === "") {
     alert("Field is empty, write something and try again!");
   } else {
-    todoList.push(new TodoItem((innerText = todoInput.value), false, "", ""));
+    todoList.push(
+      new TodoItem(
+        (innerText = todoInput.value),
+        false,
+        (innerText = categoryInput.value)
+      )
+    );
     todoInput.value = "";
+    categoryInput.value = "";
     showTodos();
   }
 }
@@ -84,10 +115,13 @@ function showTodos() {
     todoListItem.classList.add("listItem");
     let taskSpace = document.createElement("span");
     taskSpace.classList.add("taskSpace");
+    let categorySpace = document.createElement("span");
+    categorySpace.classList.add("categorySpace");
     let taskDeleteIcon = document.createElement("i");
     taskDeleteIcon.className = "bi bi-trash trashIcon";
     if (todoList[i].done === false) {
       taskSpace.innerText = todoList[i].task;
+      categorySpace.innerText = todoList[i].category;
       todoListItem.classList.add("taskStatusTodo");
       let taskToDoIcon = document.createElement("i");
       taskToDoIcon.className = "bi bi-square todoSquareIcon";
@@ -95,6 +129,7 @@ function showTodos() {
       doList.appendChild(todoListItem);
       todoListItem.appendChild(taskToDoIcon);
       todoListItem.appendChild(taskSpace);
+      todoListItem.appendChild(categorySpace);
       todoListItem.appendChild(taskDeleteIcon);
 
       // let activeTodoString = JSON.stringify(todoList);
@@ -106,6 +141,7 @@ function showTodos() {
     }
     if (todoList[i].done === true) {
       taskSpace.innerText = todoList[i].task;
+      categorySpace.innerText = todoList[i].category;
       todoListItem.classList.add("taskStatusDone");
       let taskDoneIcon = document.createElement("i");
       taskDoneIcon.className = "bi bi-check-square doneSquareIcon";
@@ -113,6 +149,7 @@ function showTodos() {
       doneList.appendChild(todoListItem);
       todoListItem.appendChild(taskDoneIcon);
       todoListItem.appendChild(taskSpace);
+      todoListItem.appendChild(categorySpace);
       todoListItem.appendChild(taskDeleteIcon);
 
       // let activeTodoString = JSON.stringify(todoList);
@@ -159,19 +196,40 @@ function deleteTask(listPosition) {
   showTodos();
 }
 
+sortNameIcon.addEventListener("click", sortTask);
+function sortTask() {
+  console.log("sortTask");
+}
+
+sortCatIcon.addEventListener("click", sortCategory);
+function sortCategory() {
+  console.log("sortCategory");
+}
+
 //activate functions
 showTodos();
 saveValueBtn.addEventListener("click", addTodo);
 
 //layout
-inputContainer.appendChild(todoInput);
-inputContainer.appendChild(saveValueBtn);
+newTodoContainer.appendChild(inputContainer);
+inputContainer.appendChild(todoLabel);
+todoLabel.appendChild(todoInput);
+inputContainer.appendChild(categoryLabel);
+categoryLabel.appendChild(categoryInput);
+newTodoContainer.appendChild(saveSortContainer);
+saveSortContainer.appendChild(saveValueBtn);
+saveSortContainer.appendChild(sortContainer);
+sortContainer.appendChild(sortNameIcon);
+sortContainer.appendChild(sortCatIcon);
 
 layoutContainer.appendChild(siteHeader);
-layoutContainer.appendChild(inputContainer);
-layoutContainer.appendChild(taskListHeader);
-layoutContainer.appendChild(doList);
-layoutContainer.appendChild(doneListHeader);
-layoutContainer.appendChild(doneList);
+layoutContainer.appendChild(newTodoContainer);
+layoutContainer.appendChild(taskContainer);
+layoutContainer.appendChild(footer);
+
+taskContainer.appendChild(taskListHeader);
+taskContainer.appendChild(doList);
+taskContainer.appendChild(doneListHeader);
+taskContainer.appendChild(doneList);
 
 console.log(todoList);
