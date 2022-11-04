@@ -7,6 +7,14 @@ class TodoItem {
   }
 }
 
+window.addEventListener("load", () => {
+  todoList = JSON.parse(localStorage.getItem("activeTasks")).map((getTask) => {
+    return new TodoItem(getTask.task, getTask.done, getTask.category);
+  });
+  showTodos();
+  console.log(todoList);
+});
+
 //array
 let todoList = [];
 
@@ -44,8 +52,8 @@ categoryLabel.innerHTML = "category<br/>";
 let categoryInput = document.createElement("input");
 categoryInput.id = "categoryInput";
 
-let saveSortContainer = document.createElement("section");
-saveSortContainer.classList.add("container__saveSortStyling");
+let saveContainer = document.createElement("section");
+saveContainer.classList.add("container__saveStyling");
 
 let saveValueBtn = document.createElement("button");
 saveValueBtn.id = "saveValueBtn";
@@ -54,15 +62,18 @@ saveValueBtn.innerText = "Save task";
 let sortContainer = document.createElement("section");
 sortContainer.classList.add("container__sortStyling");
 
-let sortNameIcon = document.createElement("i");
-sortNameIcon.className = "bi bi-sort-alpha-down sortNameIcon";
-
-let sortCatIcon = document.createElement("i");
-sortCatIcon.className = "bi bi-sort-down sortCatIcon";
+let sortIcons = document.createElement("section");
+let sortNameAZIcon = document.createElement("i");
+sortNameAZIcon.className = "bi bi-sort-alpha-down sortNameIconOn";
+let sortNameZAIcon = document.createElement("i");
+sortNameZAIcon.className = "bi bi-sort-alpha-down-alt sortNameIconOff";
 
 let taskContainer = document.createElement("section");
 taskContainer.id = "taskContainer";
 taskContainer.classList.add("container__taskStyling");
+
+let taskHeadHolder = document.createElement("section");
+taskHeadHolder.id = "taskHeadHolder";
 
 let taskListHeader = document.createElement("h3");
 taskListHeader.innerText = "ToDo";
@@ -100,6 +111,8 @@ function addTodo() {
         (innerText = categoryInput.value)
       )
     );
+    localStorage.setItem("activeTasks", JSON.stringify(todoList));
+
     todoInput.value = "";
     categoryInput.value = "";
     showTodos();
@@ -166,9 +179,6 @@ function showTodos() {
     taskDeleteIcon.addEventListener("click", () => {
       deleteTask(i);
     });
-
-    // let activeTodoString = JSON.stringify(todoList);
-    // localStorage.setItem("activeTasks", activeTodoString);
   }
 }
 
@@ -182,6 +192,8 @@ function toggleStatus(LiItem, listPosition) {
     doneList.appendChild(LiItem);
     listPosition.done = true;
   }
+  localStorage.setItem("activeTasks", JSON.stringify(todoList));
+
   console.log(todoList);
   showTodos();
 }
@@ -193,17 +205,20 @@ function deleteTask(listPosition) {
       console.log(todoList);
     }
   }
+  localStorage.setItem("activeTasks", JSON.stringify(todoList));
+
   showTodos();
 }
 
-sortNameIcon.addEventListener("click", sortTask);
+sortIcons.addEventListener("click", sortTask);
 function sortTask() {
   console.log("sortTask");
-}
-
-sortCatIcon.addEventListener("click", sortCategory);
-function sortCategory() {
-  console.log("sortCategory");
+  sortNameAZIcon.classList.toggle("sortNameIconOn");
+  sortNameAZIcon.classList.toggle("sortNameIconOff");
+  sortNameZAIcon.classList.toggle("sortNameIconOn");
+  sortNameZAIcon.classList.toggle("sortNameIconOff");
+  todoList.sort();
+  showTodos();
 }
 
 //activate functions
@@ -216,20 +231,21 @@ inputContainer.appendChild(todoLabel);
 todoLabel.appendChild(todoInput);
 inputContainer.appendChild(categoryLabel);
 categoryLabel.appendChild(categoryInput);
-newTodoContainer.appendChild(saveSortContainer);
-saveSortContainer.appendChild(saveValueBtn);
-saveSortContainer.appendChild(sortContainer);
-sortContainer.appendChild(sortNameIcon);
-sortContainer.appendChild(sortCatIcon);
+newTodoContainer.appendChild(saveContainer);
+saveContainer.appendChild(saveValueBtn);
 
 layoutContainer.appendChild(siteHeader);
 layoutContainer.appendChild(newTodoContainer);
 layoutContainer.appendChild(taskContainer);
-layoutContainer.appendChild(footer);
 
-taskContainer.appendChild(taskListHeader);
+taskContainer.appendChild(taskHeadHolder);
+taskHeadHolder.appendChild(taskListHeader);
+taskHeadHolder.appendChild(sortContainer);
+sortContainer.appendChild(sortIcons);
+sortIcons.appendChild(sortNameAZIcon);
+sortIcons.appendChild(sortNameZAIcon);
 taskContainer.appendChild(doList);
 taskContainer.appendChild(doneListHeader);
 taskContainer.appendChild(doneList);
 
-console.log(todoList);
+layoutContainer.appendChild(footer);
