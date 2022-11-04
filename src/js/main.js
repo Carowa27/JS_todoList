@@ -1,32 +1,34 @@
-//class
-class TodoItem {
-  constructor(task, done, category) {
-    this.task = task;
-    this.done = done;
-    this.category = category;
-  }
-}
-
-window.addEventListener("load", () => {
-  todoList = JSON.parse(localStorage.getItem("activeTasks")).map((getTask) => {
-    return new TodoItem(getTask.task, getTask.done, getTask.category);
-  });
-  showTodos();
-  console.log(todoList);
-});
+import { TodoItem } from "./models/class";
 
 //array
 let todoList = [];
 
-//arayItems
-todoList.push(new TodoItem("make js assignment", false, "JS"));
-todoList.push(new TodoItem("make LIA assignment", false, "Kompetensportfölj"));
-todoList.push(new TodoItem("HTML CSS exam", true, "HTML CSS"));
-todoList.push(new TodoItem("Not go CrAZy", false, "Personal"));
+//if localStorage is empty get hardcoded items
+//if localStorage has information, get it
+window.addEventListener("load", () => {
+  if (localStorage.getItem("activeTasks") === null) {
+    //arrayItems
+    todoList.push(new TodoItem("make js assignment", false, "JS"));
+    todoList.push(
+      new TodoItem("make LIA assignment", false, "Kompetensportfölj")
+    );
+    todoList.push(new TodoItem("HTML CSS exam", true, "HTML CSS"));
+    todoList.push(new TodoItem("Not go CrAZy", false, "Personal"));
+  } else {
+    //get activeTasks from localStorage
+    todoList = JSON.parse(localStorage.getItem("activeTasks")).map(
+      (getTask) => {
+        return new TodoItem(getTask.task, getTask.done, getTask.category);
+      }
+    );
+  }
+  showTodos();
+  console.log(todoList);
+});
 
 //variables and variableSettings
 let layoutContainer = document.getElementById("container");
-layoutContainer.classList.add("container", "container__layout");
+layoutContainer.classList.add("container");
 
 let siteHeader = document.createElement("h2");
 siteHeader.innerText = "todoList";
@@ -62,11 +64,11 @@ saveValueBtn.innerText = "Save task";
 let sortContainer = document.createElement("section");
 sortContainer.classList.add("container__sortStyling");
 
-let sortIcons = document.createElement("section");
 let sortNameAZIcon = document.createElement("i");
-sortNameAZIcon.className = "bi bi-sort-alpha-down sortNameIconOn";
+sortNameAZIcon.className = "bi bi-sort-alpha-down";
+
 let sortNameZAIcon = document.createElement("i");
-sortNameZAIcon.className = "bi bi-sort-alpha-down-alt sortNameIconOff";
+sortNameZAIcon.className = "bi bi-sort-alpha-down-alt";
 
 let taskContainer = document.createElement("section");
 taskContainer.id = "taskContainer";
@@ -92,13 +94,7 @@ doneList.classList.add("listLayout");
 let footer = document.createElement("footer");
 footer.classList.add("footerLayout");
 footer.innerHTML = "Carolina Warntorp";
-//local storage back into list
-// let getActiveTodoArray = JSON.parse(localStorage.getItem("activeTasks"));
 
-//   for (let i = 0; i < getActiveTodoArray.length; i++) {
-//     todoList.push(getActiveTodoArray[i]);
-//     // if(todoList[i].done)
-//   }
 //functions
 function addTodo() {
   if (todoInput.value === "") {
@@ -145,9 +141,6 @@ function showTodos() {
       todoListItem.appendChild(categorySpace);
       todoListItem.appendChild(taskDeleteIcon);
 
-      // let activeTodoString = JSON.stringify(todoList);
-      // localStorage.setItem("activeTasks", activeTodoString);
-
       taskToDoIcon.addEventListener("click", () => {
         toggleStatus(todoListItem, todoList[i]);
       });
@@ -164,9 +157,6 @@ function showTodos() {
       todoListItem.appendChild(taskSpace);
       todoListItem.appendChild(categorySpace);
       todoListItem.appendChild(taskDeleteIcon);
-
-      // let activeTodoString = JSON.stringify(todoList);
-      // localStorage.setItem("activeTasks", activeTodoString);
 
       taskDoneIcon.addEventListener("click", () => {
         toggleStatus(todoListItem, todoList[i]);
@@ -210,14 +200,37 @@ function deleteTask(listPosition) {
   showTodos();
 }
 
-sortIcons.addEventListener("click", sortTask);
-function sortTask() {
+//sort taskname from a-z
+sortNameAZIcon.addEventListener("click", sortTaskAZ);
+function sortTaskAZ() {
   console.log("sortTask");
-  sortNameAZIcon.classList.toggle("sortNameIconOn");
-  sortNameAZIcon.classList.toggle("sortNameIconOff");
-  sortNameZAIcon.classList.toggle("sortNameIconOn");
-  sortNameZAIcon.classList.toggle("sortNameIconOff");
-  todoList.sort();
+  todoList.sort((a, b) => {
+    if (a.task.toUpperCase() < b.task.toUpperCase()) {
+      return -1;
+    }
+    if (a.task.toUpperCase() > b.task.toUpperCase()) {
+      return 1;
+    }
+
+    return 0;
+  });
+  showTodos();
+}
+
+//sort taskname from z-a
+sortNameZAIcon.addEventListener("click", sortTaskZA);
+function sortTaskZA() {
+  console.log("sortTask");
+  todoList.sort((a, b) => {
+    if (a.task.toUpperCase() > b.task.toUpperCase()) {
+      return -1;
+    }
+    if (a.task.toUpperCase() < b.task.toUpperCase()) {
+      return 1;
+    }
+
+    return 0;
+  });
   showTodos();
 }
 
@@ -241,9 +254,8 @@ layoutContainer.appendChild(taskContainer);
 taskContainer.appendChild(taskHeadHolder);
 taskHeadHolder.appendChild(taskListHeader);
 taskHeadHolder.appendChild(sortContainer);
-sortContainer.appendChild(sortIcons);
-sortIcons.appendChild(sortNameAZIcon);
-sortIcons.appendChild(sortNameZAIcon);
+sortContainer.appendChild(sortNameAZIcon);
+sortContainer.appendChild(sortNameZAIcon);
 taskContainer.appendChild(doList);
 taskContainer.appendChild(doneListHeader);
 taskContainer.appendChild(doneList);
